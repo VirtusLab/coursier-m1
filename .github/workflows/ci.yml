@@ -12,7 +12,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macOS-m1, macos-latest]
+        os: []
+        jvm: []
+        include:
+          - os: macOS-m1
+            jvm: "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.3_7.tar.gz"
+          - os: macos-latest
+            jvm: "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7.tar.gz"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -21,7 +27,7 @@ jobs:
       - uses: coursier/cache-action@v6.3
       - uses: coursier/setup-action@v1.2.0-M3
         with:
-          jvm: temurin:17
+          jvm: ${{ matrix.jvm }}
       - run: |
           ./mill -i "cs-m1.writeNativeImageScript" generate.sh "" && \
           ./generate.sh && \
