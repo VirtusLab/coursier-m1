@@ -13,10 +13,10 @@ jobs:
       fail-fast: false
       matrix:
         os: ["macOS-m1"]
-        jvm: ["https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.3_7.tar.gz"]
+        jvm: ["https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-aarch64-22.1.0.tar.gz"]
         include:
           - os: macos-latest
-            jvm: "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7.tar.gz"
+            jvm: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -31,6 +31,8 @@ jobs:
           ./mill -i "cs-m1.writeNativeImageScript" generate.sh "" && \
           ./generate.sh && \
           ./mill -i "cs-m1.copyToArtifacts" artifacts/
+        env:
+          GRAALVM_ID: ${{ matrix.jvm }}
       - uses: actions/upload-artifact@v2.2.4
         with:
           name: launcher
