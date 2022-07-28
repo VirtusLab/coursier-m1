@@ -25,6 +25,7 @@ jobs:
       - uses: coursier/cache-action@v6.3
       - uses: coursier/setup-action@8cf358e7c8c83df4279f5e186cb6e5d5e11a2208
         with:
+          apps: ""
           jvm: ${{ matrix.jvm }}
       - run: |
           ./mill -i "cs-m1.writeNativeImageScript" generate.sh "" && \
