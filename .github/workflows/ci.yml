@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
           submodules: true
       - uses: coursier/cache-action@v6.3
-      - uses: coursier/setup-action@8cf358e7c8c83df4279f5e186cb6e5d5e11a2208
+      - uses: coursier/setup-action@b71ec1e4f3bd416df76cfa8786ba32252ba226a0@
         with:
           apps: ""
           jvm: ${{ matrix.jvm }}
