@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+jobs:
+  generate-launchers:
+    runs-on: macOS-m1
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: true
+      - uses: coursier/cache-action@v6.3
+      - uses: coursier/setup-action@v1.2.0-M3
+        with:
+          jvm: temurin:17
+      - run: |
+          ./mill -i "cs-m1.writeNativeImageScript" generate.sh "" && \
+          ./generate.sh && \
+          ./mill -i "cs-m1.copyToArtifacts" artifacts/
+      - uses: actions/upload-artifact@v2.2.4
+        with:
+          name: launcher
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 1
+      - name: Test
+        run: ./mill -i cs-m1-tests.test
+      - run: ./mill -i ci.upload artifacts/
+        if: github.event_name == 'push'
+        env:
+          UPLOAD_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
