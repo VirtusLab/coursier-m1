@@ -6,7 +6,7 @@ import io.github.alexarchambault.millnativeimage.upload.Upload
 import mill._
 import mill.scalalib._
 
-def coursierVersion = "2.1.0-M6-28-gbad85693f"
+def coursierVersion = "2.1.0-M6-44-gc47ecec07"
 
 object `cs-m1` extends JavaModule with NativeImage {
   def ivyDeps = super.ivyDeps() ++ Seq(
@@ -34,7 +34,7 @@ object `cs-m1` extends JavaModule with NativeImage {
 object `cs-m1-tests` extends ScalaModule {
   def scalaVersion = "2.12.16"
   def ivyDeps = super.ivyDeps() ++ Seq(
-    ivy"io.get-coursier:cli-tests_2.12:2.1.0-M6-28-gbad85693f-12-c7620d19f-SNAPSHOT"
+    ivy"io.get-coursier:cli-tests_2.12:$coursierVersion"
   )
   object test extends Tests {
     def ivyDeps = super.ivyDeps() ++ Seq(
@@ -42,7 +42,7 @@ object `cs-m1-tests` extends ScalaModule {
     )
     def testFramework = "utest.runner.Framework"
     def forkEnv = super.forkEnv() ++ Seq(
-      "COURSIER_M1_LAUNCHER" -> os.proc("cs", "get", "--archive", "https://github.com/coursier/coursier/releases/download/v2.1.0-M6-28-gbad85693f/cs-x86_64-apple-darwin.gz").call().out.trim()
+      "COURSIER_M1_LAUNCHER" -> `cs-m1`.nativeImage().path.toString
     )
   }
 }
