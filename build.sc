@@ -13,7 +13,9 @@ object `cs-m1` extends JavaModule with NativeImage {
     ivy"io.get-coursier:coursier-cli_2.12:$coursierVersion"
   )
 
-  def nativeImageGraalVmJvmId = sys.env.getOrElse("GRAALVM_ID", "graalvm-java17:22.1.0")
+  def nativeImageGraalVmJvmId = T {
+    sys.env.getOrElse("GRAALVM_ID", "graalvm-java17:22.1.0")
+  }
 
   def nativeImageClassPath = runClasspath()
   def nativeImageMainClass = "coursier.cli.Coursier"
