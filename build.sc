@@ -17,6 +17,16 @@ object `cs-m1` extends JavaModule with NativeImage {
 
   def nativeImageClassPath = runClasspath()
   def nativeImageMainClass = "coursier.cli.Coursier"
+
+  def copyToArtifacts(directory: String = "artifacts/") = T.command {
+    val _ = Upload.copyLauncher(
+      nativeImage().path,
+      directory,
+      "cs",
+      compress = true,
+      suffix = ""
+    )
+  }
 }
 
 object `cs-m1-tests` extends ScalaModule {
