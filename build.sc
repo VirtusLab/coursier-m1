@@ -60,6 +60,6 @@ object ci extends Module {
     }
     val tag = "v" + version
 
-    Upload.upload("scala-cli", "java-class-name", ghToken, tag, dryRun = false, overwrite = true)(launchers: _*)
+    Upload.upload("VirtusLab", "coursier-m1", ghToken, tag, dryRun = false, overwrite = true)(launchers: _*)
   }
 }
