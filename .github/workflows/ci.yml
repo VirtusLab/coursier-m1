@@ -7,8 +7,12 @@ on:
       - "v*"
   pull_request:
 jobs:
-  generate-launchers:
-    runs-on: macOS-m1
+  build-launcher:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macOS-m1, macos-latest]
     steps:
       - uses: actions/checkout@v2
         with:
