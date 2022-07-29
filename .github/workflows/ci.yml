@@ -32,6 +32,7 @@ jobs:
           ./generate.sh && \
           ./mill -i "cs-m1.copyToArtifacts" artifacts/
         env:
+          CI: 1
           GRAALVM_ID: ${{ matrix.jvm }}
       - uses: actions/upload-artifact@v2.2.4
         with:
