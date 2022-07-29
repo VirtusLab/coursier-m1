@@ -19,6 +19,7 @@ object `cs-m1` extends JavaModule with NativeImage {
 
   def nativeImageClassPath = runClasspath()
   def nativeImageMainClass = "coursier.cli.Coursier"
+  def nativeImagePersist = System.getenv("CI") != null
 
   def copyToArtifacts(directory: String = "artifacts/") = T.command {
     val _ = Upload.copyLauncher(
