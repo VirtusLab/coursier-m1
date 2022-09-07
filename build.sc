@@ -39,7 +39,7 @@ object `cs-m1-tests` extends ScalaModule {
   )
   object test extends Tests {
     def ivyDeps = super.ivyDeps() ++ Seq(
-      ivy"com.lihaoyi::utest::0.8.0"
+      ivy"com.lihaoyi::utest::0.8.1"
     )
     def testFramework = "utest.runner.Framework"
     def forkEnv = super.forkEnv() ++ Seq(
