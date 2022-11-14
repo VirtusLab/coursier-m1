@@ -18,7 +18,7 @@ jobs:
           - os: macos-latest
             jvm: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
           submodules: true
