@@ -6,7 +6,7 @@ import io.github.alexarchambault.millnativeimage.upload.Upload
 import mill._
 import mill.scalalib._
 
-def coursierVersion = "2.1.0-RC1"
+def coursierVersion = "2.1.0-RC2"
 
 object `cs-m1` extends JavaModule with NativeImage {
   def ivyDeps = super.ivyDeps() ++ Seq(
