@@ -1,4 +1,4 @@
-import $ivy.`io.github.alexarchambault.mill::mill-native-image::0.1.22`
+import $ivy.`io.github.alexarchambault.mill::mill-native-image::0.1.23`
 import $ivy.`io.github.alexarchambault.mill::mill-native-image-upload:0.1.21`
 
 import io.github.alexarchambault.millnativeimage.NativeImage
