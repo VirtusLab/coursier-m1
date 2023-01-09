@@ -7,16 +7,8 @@ on:
       - "v*"
   pull_request:
 jobs:
-  build-launcher:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ["macOS-m1"]
-        jvm: ["https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-aarch64-22.1.0.tar.gz"]
-        include:
-          - os: macos-latest
-            jvm: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
+  build-macos-launcher:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -25,22 +17,56 @@ jobs:
       - uses: coursier/setup-action@70323223454ac2a9eb2de46f389b4d045cbcdea5
         with:
           apps: ""
-          jvm: ${{ matrix.jvm }}
+          jvm: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
       - run: |
           ./mill -i "cs-m1.writeNativeImageScript" generate.sh "" && \
           ./generate.sh && \
           ./mill -i "cs-m1.copyToArtifacts" artifacts/
         env:
-          CI: 1
-          GRAALVM_ID: ${{ matrix.jvm }}
+          GRAALVM_ID: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
       - uses: actions/upload-artifact@v3.1.2
         with:
-          name: launcher
+          name: macos-launcher
           path: artifacts/
           if-no-files-found: error
           retention-days: 1
       - name: Test
         run: ./mill -i cs-m1-tests.test
+
+  build-linux-launcher:
+    runs-on: "macOS-m1"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: true
+      - uses: coursier/setup-action@70323223454ac2a9eb2de46f389b4d045cbcdea5
+        with:
+          apps: ""
+
+      - run: .github/scripts/build-linux-aarch64.sh
+
+      - uses: actions/upload-artifact@v3.1.1
+        with:
+          name: linux-launcher
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 1
+
+      - run: .github/scripts/test-linux-aarch64.sh
+
+  upload-artifacts:
+    runs-on: "ubuntu-latest"
+    needs: ["build-macos-launcher", "build-linux-launcher"]
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: macos-launcher
+          path: artifacts/
+      - uses: actions/download-artifact@v3
+        with:
+          name: linux-launcher
+          path: artifacts/
       - run: ./mill -i ci.upload artifacts/
         if: github.event_name == 'push'
         env:
