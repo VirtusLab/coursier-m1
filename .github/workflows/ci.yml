@@ -7,7 +7,7 @@ on:
       - "v*"
   pull_request:
 jobs:
-  build-launcher:
+  build-macos-launcher:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -33,7 +33,7 @@ jobs:
       - name: Test
         run: ./mill -i cs-m1-tests.test
 
-  build-linux-aarch64-launcher:
+  build-linux-launcher:
     runs-on: "macOS-m1"
     steps:
       - uses: actions/checkout@v3
@@ -57,7 +57,7 @@ jobs:
 
   upload-artifacts:
     runs-on: "ubuntu-latest"
-    needs: ["build-launcher", "build-linux-aarch64-launcher"]
+    needs: ["build-macos-launcher", "build-linux-launcher"]
     steps:
       - uses: actions/download-artifact@v3
         with:
