@@ -33,7 +33,7 @@ jobs:
         env:
           CI: 1
           GRAALVM_ID: ${{ matrix.jvm }}
-      - uses: actions/upload-artifact@v3.1.1
+      - uses: actions/upload-artifact@v3.1.2
         with:
           name: launcher
           path: artifacts/
