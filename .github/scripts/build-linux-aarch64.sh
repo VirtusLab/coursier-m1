@@ -8,7 +8,7 @@ mkdir -p utils
 cp "$(cs get https://github.com/coursier/coursier/releases/download/v2.0.16/cs-aarch64-pc-linux)" utils/cs
 chmod +x utils/cs
 
-cp "$DIR/linux-aarch64-from-docker.sh" utils/
+cp "$DIR/build-linux-aarch64-from-docker.sh" utils/
 
 docker run $(if test -t 1; then echo "-it"; fi) --rm \
   --volume "$(pwd):/data" \
