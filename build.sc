@@ -6,6 +6,8 @@ import io.github.alexarchambault.millnativeimage.upload.Upload
 import mill._
 import mill.scalalib._
 
+import scala.util.Properties
+
 def coursierVersion = "2.1.0-RC4"
 
 object `cs-m1` extends JavaModule with NativeImage {
@@ -20,6 +22,17 @@ object `cs-m1` extends JavaModule with NativeImage {
   def nativeImageClassPath = runClasspath()
   def nativeImageMainClass = "coursier.cli.Coursier"
   def nativeImagePersist = System.getenv("CI") != null
+
+  def nativeImageOptions = T {
+    if (Properties.isLinux)
+      Seq(
+        // required on the Linux / ARM64 CI in particular (not sure why)
+        "-Djdk.lang.Process.launchMechanism=vfork", // https://mbien.dev/blog/entry/custom-java-runtimes-with-jlink
+        "-H:PageSize=65536" // Make sure binary runs on kernels with page size set to 4k, 16 and 64k
+      )
+    else
+      Nil
+  }
 
   def copyToArtifacts(directory: String = "artifacts/") = T.command {
     val _ = Upload.copyLauncher(
