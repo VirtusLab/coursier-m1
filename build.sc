@@ -1,6 +1,8 @@
+import $ivy.`de.tototec::de.tobiasroeser.mill.vcs.version::0.1.4`
 import $ivy.`io.github.alexarchambault.mill::mill-native-image::0.1.23`
 import $ivy.`io.github.alexarchambault.mill::mill-native-image-upload:0.1.21`
 
+import de.tobiasroeser.mill.vcs.version._
 import io.github.alexarchambault.millnativeimage.NativeImage
 import io.github.alexarchambault.millnativeimage.upload.Upload
 import mill._
@@ -63,7 +65,7 @@ object `cs-m1-tests` extends ScalaModule {
 
 object ci extends Module {
   def upload(directory: String = "artifacts/") = T.command {
-    val version = coursierVersion
+    val version = tag()
 
     val path = os.Path(directory, os.pwd)
     val launchers = os.list(path).filter(os.isFile(_)).map { path =>
@@ -72,8 +74,44 @@ object ci extends Module {
     val ghToken = Option(System.getenv("UPLOAD_GH_TOKEN")).getOrElse {
       sys.error("UPLOAD_GH_TOKEN not set")
     }
-    val tag = "v" + version
+    val (tag0, overwrite) =
+      if (version.endsWith("-SNAPSHOT")) ("nightly", true)
+      else ("v" + version, false)
 
-    Upload.upload("VirtusLab", "coursier-m1", ghToken, tag, dryRun = false, overwrite = true)(launchers: _*)
+    Upload.upload("VirtusLab", "coursier-m1", ghToken, tag0, dryRun = false, overwrite = overwrite)(launchers: _*)
+  }
+
+  private def computePublishVersion(state: VcsState): String =
+    if (state.commitsSinceLastTag > 0) {
+      val versionOrEmpty = state.lastTag
+        .filter(_ != "latest")
+        .filter(_ != "nightly")
+        .map(_.stripPrefix("v"))
+        .flatMap { tag =>
+          val baseVersion = tag.takeWhile(c => c == '.' || c.isDigit)
+          if (baseVersion == tag || tag.stripPrefix(baseVersion).forall(c => c == '-' || c.isDigit)) {
+            val idx = baseVersion.lastIndexOf(".")
+            if (idx >= 0)
+              Some(baseVersion.take(idx + 1) + (baseVersion.drop(idx + 1).toInt + 1).toString + "-SNAPSHOT")
+            else
+              None
+          }
+          else
+            Some(baseVersion + "-SNAPSHOT")
+        }
+        .getOrElse("0.0.1-SNAPSHOT")
+      Some(versionOrEmpty)
+        .filter(_.nonEmpty)
+        .getOrElse(state.format())
+    }
+    else
+      state
+        .lastTag
+        .getOrElse(state.format())
+        .stripPrefix("v")
+
+  def tag = T {
+    val state = VcsVersion.vcsState()
+    computePublishVersion(state)
   }
 }
