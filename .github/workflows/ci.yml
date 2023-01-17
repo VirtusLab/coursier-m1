@@ -56,18 +56,24 @@ jobs:
       - run: .github/scripts/test-linux-aarch64.sh
 
   upload-artifacts:
+    if: github.event_name == 'push'
     runs-on: "ubuntu-latest"
     needs: ["build-macos-launcher", "build-linux-launcher"]
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: true
+      - name: Get macOS launchers
+        uses: actions/download-artifact@v3
         with:
           name: macos-launcher
           path: artifacts/
-      - uses: actions/download-artifact@v3
+      - name: Get Linux launcher
+        uses: actions/download-artifact@v3
         with:
           name: linux-launcher
           path: artifacts/
       - run: ./mill -i ci.upload artifacts/
-        if: github.event_name == 'push'
         env:
           UPLOAD_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
