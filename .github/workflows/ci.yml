@@ -8,7 +8,17 @@ on:
   pull_request:
 jobs:
   build-macos-launcher:
-    runs-on: macos-latest
+    name: build-macos-launcher ${{ matrix.OS }}
+    strategy:
+      fail-fast: false
+      matrix:
+        OS: ["macOS-m1", "macos-latest"]
+        include:
+          - OS: "macOS-m1"
+            JVM: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-aarch64-22.1.0.tar.gz"
+          - OS: "macos-latest"
+            JVM: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
+    runs-on: ${{ matrix.OS }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -17,13 +27,13 @@ jobs:
       - uses: coursier/setup-action@70323223454ac2a9eb2de46f389b4d045cbcdea5
         with:
           apps: ""
-          jvm: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
+          jvm: ${{ matrix.JVM }}
       - run: |
           ./mill -i "cs-m1.writeNativeImageScript" generate.sh "" && \
           ./generate.sh && \
           ./mill -i "cs-m1.copyToArtifacts" artifacts/
         env:
-          GRAALVM_ID: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
+          GRAALVM_ID: ${{ matrix.JVM }}
       - uses: actions/upload-artifact@v3.1.2
         with:
           name: macos-launcher
