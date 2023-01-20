@@ -34,6 +34,10 @@ jobs:
           ./mill -i "cs-m1.copyToArtifacts" artifacts/
         env:
           GRAALVM_ID: ${{ matrix.JVM }}
+      - name: Build OS packages
+        if: matrix.os == 'macOS-m1'
+        run: .github/scripts/generate-os-packages.sh
+        shell: bash
       - uses: actions/upload-artifact@v3.1.2
         with:
           name: macos-launcher

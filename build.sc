@@ -115,3 +115,10 @@ object ci extends Module {
     computePublishVersion(state)
   }
 }
+def copyTo(task: mill.main.Tasks[PathRef], dest: os.Path) = T.command {
+  if (task.value.length > 1)
+    sys.error("Expected a single task")
+  val ref = task.value.head()
+  os.makeDir.all(dest / os.up)
+  os.copy.over(ref.path, dest)
+}
