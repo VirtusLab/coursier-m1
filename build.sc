@@ -1,4 +1,4 @@
-import $ivy.`de.tototec::de.tobiasroeser.mill.vcs.version::0.1.4`
+import $ivy.`de.tototec::de.tobiasroeser.mill.vcs.version::0.3.0`
 import $ivy.`io.github.alexarchambault.mill::mill-native-image::0.1.23`
 import $ivy.`io.github.alexarchambault.mill::mill-native-image-upload:0.1.21`
 
@@ -10,7 +10,7 @@ import mill.scalalib._
 
 import scala.util.Properties
 
-def coursierVersion = "2.1.0"
+def coursierVersion = "2.1.1"
 
 object `cs-m1` extends JavaModule with NativeImage {
   def ivyDeps = super.ivyDeps() ++ Seq(
