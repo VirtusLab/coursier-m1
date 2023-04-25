@@ -10,7 +10,7 @@ import mill.scalalib._
 
 import scala.util.Properties
 
-def coursierVersion = "2.1.1"
+def coursierVersion = "2.1.2"
 
 object `cs-m1` extends JavaModule with NativeImage {
   def ivyDeps = super.ivyDeps() ++ Seq(
