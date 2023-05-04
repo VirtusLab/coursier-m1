@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-      - uses: coursier/setup-action@70323223454ac2a9eb2de46f389b4d045cbcdea5
+      - uses: coursier/setup-action@v1.3
         with:
           apps: ""
           jvm: ${{ matrix.JVM }}
@@ -54,7 +54,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-      - uses: coursier/setup-action@70323223454ac2a9eb2de46f389b4d045cbcdea5
+      - uses: coursier/setup-action@v1.3
         with:
           apps: ""
 
