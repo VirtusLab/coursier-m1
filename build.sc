@@ -11,9 +11,9 @@ import mill.scalalib._
 import scala.util.Properties
 
 def scalaDefaultVersion = "2.12.17"
-def coursierVersion = "2.1.4"
-def graalVmVersion = "22.1.0"
-def utestVersion = "0.8.1"
+def coursierVersion     = "2.1.4"
+def graalVmVersion      = "22.1.0"
+def utestVersion        = "0.8.1"
 
 object `cs-m1` extends JavaModule with NativeImage {
   def ivyDeps = super.ivyDeps() ++ Seq(
@@ -26,7 +26,7 @@ object `cs-m1` extends JavaModule with NativeImage {
 
   def nativeImageClassPath = runClasspath()
   def nativeImageMainClass = "coursier.cli.Coursier"
-  def nativeImagePersist = System.getenv("CI") != null
+  def nativeImagePersist   = System.getenv("CI") != null
 
   def nativeImageOptions = T {
     if (Properties.isLinux)
@@ -81,7 +81,14 @@ object ci extends Module {
       if (version.endsWith("-SNAPSHOT")) ("nightly", true)
       else ("v" + version, false)
 
-    Upload.upload("VirtusLab", "coursier-m1", ghToken, tag0, dryRun = false, overwrite = overwrite)(launchers: _*)
+    Upload.upload(
+      "VirtusLab",
+      "coursier-m1",
+      ghToken,
+      tag0,
+      dryRun = false,
+      overwrite = overwrite
+    )(launchers: _*)
   }
 
   private def computePublishVersion(state: VcsState): String =
@@ -92,10 +99,18 @@ object ci extends Module {
         .map(_.stripPrefix("v"))
         .flatMap { tag =>
           val baseVersion = tag.takeWhile(c => c == '.' || c.isDigit)
-          if (baseVersion == tag || tag.stripPrefix(baseVersion).forall(c => c == '-' || c.isDigit)) {
+          if (
+            baseVersion == tag || tag
+              .stripPrefix(baseVersion)
+              .forall(c => c == '-' || c.isDigit)
+          ) {
             val idx = baseVersion.lastIndexOf(".")
             if (idx >= 0)
-              Some(baseVersion.take(idx + 1) + (baseVersion.drop(idx + 1).toInt + 1).toString + "-SNAPSHOT")
+              Some(
+                baseVersion.take(idx + 1) + (baseVersion
+                  .drop(idx + 1)
+                  .toInt + 1).toString + "-SNAPSHOT"
+              )
             else
               None
           }
@@ -108,8 +123,7 @@ object ci extends Module {
         .getOrElse(state.format())
     }
     else
-      state
-        .lastTag
+      state.lastTag
         .getOrElse(state.format())
         .stripPrefix("v")
 
