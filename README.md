@@ -1,12 +1,12 @@
 *coursier-m1*
 
-Apple M1 launchers of [coursier](https://github.com/coursier/coursier)
+Apple M1 and Linux aarch64 launchers of [coursier](https://github.com/coursier/coursier)
 
 Find the launchers as assets of the [releases](https://github.com/VirtusLab/coursier-m1/releases).
 
 This repository builds coursier launchers for macOS, both for
 Intel processors (as a sanity check of the build here), and for
-M1.
+M1, alongside launchers for Linux on aarch64.
 
 The generated launchers are tested just like those of the main coursier
 repository, via the

@@ -8,4 +8,6 @@ object BootstrapTests extends coursier.clitests.BootstrapTests {
   override def acceptsJOptions = false
 
   override def enableNailgunTest = false
+
+  override def hasDocker = false
 }
