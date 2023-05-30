@@ -33,7 +33,7 @@ object `cs-m1` extends JavaModule with NativeImage {
 }
 
 object `cs-m1-tests` extends ScalaModule {
-  def scalaVersion = "2.13.10"
+  def scalaVersion = "2.12.17"
   def ivyDeps = super.ivyDeps() ++ Seq(
     ivy"io.get-coursier:cli-tests_2.12:$coursierVersion"
   )
