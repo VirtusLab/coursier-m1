@@ -1,5 +1,5 @@
 import $ivy.`de.tototec::de.tobiasroeser.mill.vcs.version::0.3.1`
-import $ivy.`io.github.alexarchambault.mill::mill-native-image::0.1.24`
+import $ivy.`io.github.alexarchambault.mill::mill-native-image::0.1.25`
 import $ivy.`io.github.alexarchambault.mill::mill-native-image-upload:0.1.24`
 
 import de.tobiasroeser.mill.vcs.version._
@@ -11,7 +11,7 @@ import mill.scalalib._
 import scala.util.Properties
 
 def scalaDefaultVersion = "2.12.17"
-def coursierVersion     = "2.1.4"
+def coursierVersion     = "2.1.6"
 def graalVmVersion      = "22.1.0"
 def utestVersion        = "0.8.1"
 
