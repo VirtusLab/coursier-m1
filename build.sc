@@ -13,7 +13,7 @@ import scala.util.Properties
 def scalaDefaultVersion = "2.12.18"
 def coursierVersion     = "2.1.7"
 def graalVmVersion      = "22.1.0"
-def utestVersion        = "0.8.1"
+def utestVersion        = "0.8.2"
 
 object `cs-m1` extends JavaModule with NativeImage {
   def ivyDeps = super.ivyDeps() ++ Seq(
