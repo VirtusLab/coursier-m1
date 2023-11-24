@@ -55,7 +55,7 @@ object `cs-m1-tests` extends ScalaModule {
   def ivyDeps = super.ivyDeps() ++ Seq(
     ivy"io.get-coursier:cli-tests_2.12:$coursierVersion"
   )
-  object test extends Tests {
+  object test extends ScalaTests {
     def ivyDeps = super.ivyDeps() ++ Seq(
       ivy"com.lihaoyi::utest::$utestVersion"
     )
@@ -132,7 +132,8 @@ object ci extends Module {
     computePublishVersion(state)
   }
 }
-def copyTo(task: mill.main.Tasks[PathRef], dest: os.Path) = T.command {
+def copyTo(task: mill.main.Tasks[PathRef], destPath: String) = T.command {
+  val dest = os.Path(destPath, millSourcePath)
   if (task.value.length > 1)
     sys.error("Expected a single task")
   val ref = task.value.head()
