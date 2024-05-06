@@ -11,7 +11,7 @@ import mill.scalalib._
 import scala.util.Properties
 
 def scalaDefaultVersion = "2.12.19"
-def coursierVersion     = "2.1.9"
+def coursierVersion     = "2.1.10"
 def graalVmVersion      = "22.1.0"
 def utestVersion        = "0.8.3"
 
