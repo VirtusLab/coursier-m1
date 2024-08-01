@@ -12,11 +12,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        OS: ["macOS-m1", "macos-latest"]
+        OS: ["macos-14", "macos-13"]
         include:
-          - OS: "macOS-m1"
+          - OS: "macos-14"
             JVM: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-aarch64-22.1.0.tar.gz"
-          - OS: "macos-latest"
+          - OS: "macos-13"
             JVM: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
     runs-on: ${{ matrix.OS }}
     steps:
@@ -35,7 +35,7 @@ jobs:
         env:
           GRAALVM_ID: ${{ matrix.JVM }}
       - name: Build OS packages
-        if: matrix.os == 'macOS-m1'
+        if: matrix.os == 'macos-14'
         run: .github/scripts/generate-os-packages.sh
         shell: bash
       - uses: actions/upload-artifact@v3.1.2
