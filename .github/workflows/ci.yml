@@ -57,9 +57,14 @@ jobs:
       - uses: coursier/setup-action@v1.3
         with:
           apps: ""
-
-      - run: .github/scripts/build-linux-aarch64.sh
-
+      - run: |
+          set -euv
+          mkdir -p artifacts
+          mkdir -p utils
+          cp "$(cs get https://github.com/coursier/coursier/releases/download/v2.0.16/cs-aarch64-pc-linux)" utils/cs
+          chmod +x utils/cs
+          cp "./.github/scripts/build-linux-aarch64-from-docker.sh" utils/
+          docker run ubuntu:20.04 echo "Hello world!"
       - uses: actions/upload-artifact@v3.1.2
         with:
           name: linux-launcher
