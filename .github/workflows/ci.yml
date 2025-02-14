@@ -16,8 +16,10 @@ jobs:
         include:
           - OS: "macos-14"
             JVM: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-aarch64-22.1.0.tar.gz"
+            arch: "aarch64"
           - OS: "macos-13"
             JVM: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-darwin-amd64-22.1.0.tar.gz"
+            arch: "x86_64"
     runs-on: ${{ matrix.OS }}
     steps:
       - uses: actions/checkout@v3
@@ -35,12 +37,12 @@ jobs:
         env:
           GRAALVM_ID: ${{ matrix.JVM }}
       - name: Build OS packages
-        if: matrix.os == 'macos-14'
+        if: matrix.arch == 'aarch64'
         run: .github/scripts/generate-os-packages.sh
         shell: bash
-      - uses: actions/upload-artifact@v3.1.2
+      - uses: actions/upload-artifact@v4
         with:
-          name: macos-launcher
+          name: macos-launcher-${{ matrix.arch }}
           path: artifacts/
           if-no-files-found: error
           retention-days: 1
@@ -60,7 +62,7 @@ jobs:
 
       - run: .github/scripts/build-linux-aarch64.sh
 
-      - uses: actions/upload-artifact@v3.1.2
+      - uses: actions/upload-artifact@v4
         with:
           name: linux-launcher
           path: artifacts/
@@ -78,13 +80,18 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-      - name: Get macOS launchers
-        uses: actions/download-artifact@v3
+      - name: Get aarch64 macOS launcher
+        uses: actions/download-artifact@v4
         with:
-          name: macos-launcher
+          name: macos-launcher-aarch64
+          path: artifacts/
+      - name: Get x86_64 macOS launcher
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-launcher-x86_64
           path: artifacts/
       - name: Get Linux launcher
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-launcher
           path: artifacts/
