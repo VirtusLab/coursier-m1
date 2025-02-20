@@ -10,14 +10,14 @@ import mill.scalalib._
 
 import scala.util.Properties
 
-def scalaDefaultVersion = "2.13.16"
+def scalaDefaultVersion = "3.3.5"
 def coursierVersion     = "2.1.25-M2"
 def graalVmVersion      = "22.1.0"
 def utestVersion        = "0.8.5"
 
 object `cs-m1` extends JavaModule with NativeImage {
   def ivyDeps = super.ivyDeps() ++ Seq(
-    ivy"io.get-coursier:coursier-cli_2.13:$coursierVersion"
+    ivy"io.get-coursier:coursier-cli_3:$coursierVersion"
   )
 
   def nativeImageGraalVmJvmId = T {
@@ -53,7 +53,7 @@ object `cs-m1` extends JavaModule with NativeImage {
 object `cs-m1-tests` extends ScalaModule {
   def scalaVersion = scalaDefaultVersion
   def ivyDeps = super.ivyDeps() ++ Seq(
-    ivy"io.get-coursier:cli-tests_2.13:$coursierVersion"
+    ivy"io.get-coursier:cli-tests_3:$coursierVersion"
   )
   object test extends Tests {
     def ivyDeps = super.ivyDeps() ++ Seq(
