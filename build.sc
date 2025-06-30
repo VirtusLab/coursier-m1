@@ -52,7 +52,7 @@ object `cs-m1` extends JavaModule with NativeImage {
 
 object `cs-m1-tests` extends ScalaModule {
   def scalaVersion = scalaDefaultVersion
-  def ivyDeps = super.ivyDeps() ++ Seq(
+  def ivyDeps      = super.ivyDeps() ++ Seq(
     ivy"io.get-coursier:cli-tests_2.13:$coursierVersion"
   )
   object test extends Tests {
@@ -60,7 +60,7 @@ object `cs-m1-tests` extends ScalaModule {
       ivy"com.lihaoyi::utest::$utestVersion"
     )
     def testFramework = "utest.runner.Framework"
-    def forkEnv = super.forkEnv() ++ Seq(
+    def forkEnv       = super.forkEnv() ++ Seq(
       "COURSIER_M1_LAUNCHER" -> `cs-m1`.nativeImage().path.toString
     )
   }
@@ -70,7 +70,7 @@ object ci extends Module {
   def upload(directory: String = "artifacts/") = T.command {
     val version = tag()
 
-    val path = os.Path(directory, os.pwd)
+    val path      = os.Path(directory, os.pwd)
     val launchers = os.list(path).filter(os.isFile(_)).map { path =>
       path -> path.last
     }
