@@ -6,7 +6,7 @@ apt-get install -q -y build-essential libz-dev zlib1g-dev git python3-pip curl
 
 export PATH="$(pwd)/utils:$PATH"
 
-eval "$(cs java --env --jvm temurin:17 --jvm-index https://github.com/coursier/jvm-index/raw/master/index.json)"
+eval "$(cs java --env --jvm temurin:21 --jvm-index https://github.com/coursier/jvm-index/raw/master/index.json)"
 
 git config --global --add safe.directory "$(pwd)"
 
