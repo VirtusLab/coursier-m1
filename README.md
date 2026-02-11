@@ -1,3 +1,6 @@
+*This repository is considered legacy. 
+[Coursier](https://github.com/coursier/coursier/releases?page=2) provides native images for MacOS & Linux ARM64 since [v2.1.25-M6](https://github.com/coursier/coursier/releases/tag/v2.1.25-M6).*
+
 *coursier-m1*
 
 Apple M1 and Linux aarch64 launchers of [coursier](https://github.com/coursier/coursier)
