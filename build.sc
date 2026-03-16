@@ -100,16 +100,18 @@ object ci extends Module {
         .flatMap { tag =>
           val baseVersion = tag.takeWhile(c => c == '.' || c.isDigit)
           if (
-            baseVersion == tag || tag
+            baseVersion == tag ||
+            tag
               .stripPrefix(baseVersion)
               .forall(c => c == '-' || c.isDigit)
           ) {
             val idx = baseVersion.lastIndexOf(".")
             if (idx >= 0)
               Some(
-                baseVersion.take(idx + 1) + (baseVersion
-                  .drop(idx + 1)
-                  .toInt + 1).toString + "-SNAPSHOT"
+                baseVersion.take(idx + 1) +
+                  (baseVersion
+                    .drop(idx + 1)
+                    .toInt + 1).toString + "-SNAPSHOT"
               )
             else
               None
